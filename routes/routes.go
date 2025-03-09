@@ -1,23 +1,17 @@
 package routes
 
 import (
-	"net/http"
-
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/niliaranet/forum/handlers"
 )
 
 var router = gin.Default()
 
 func Run() {
+	fmt.Println("running")
 	router.LoadHTMLGlob("templates/*")
 
-	router.GET("/", returnHello)
+	router.GET("/", handlers.MainPage)
 	router.Run("localhost:8080")
 }
-
-func returnHello(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.html", gin.H{
-		"status": "success!",
-	})
-}
-
