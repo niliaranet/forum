@@ -1,0 +1,19 @@
+{{ template "head.html" .}}
+{{ template "header.html" .}}
+
+<main>
+
+<h1>New Post</h1>
+<form action="newPost" method="post">
+    <label for="title">Title</label><br>
+    <input class="text-input" name="name" type="text" autofocus><br><br>
+
+    <label for="content">Content</label><br>
+    <textarea class="text-input" name="content" type="text" rows="5"></textarea><br><br>
+
+    <input class="button" type="submit" value="Submit">
+</form>
+
+</main>
+
+{{ template "footer.html" .}}

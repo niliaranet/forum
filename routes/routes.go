@@ -12,5 +12,7 @@ func Run() {
 	router.Static("/static", "./static")
 
 	router.GET("/", handlers.MainPage)
+	router.GET("/newPost", handlers.NewPostForm)
+	router.POST("/newPost", handlers.CreatePost)
 	router.Run("localhost:8080")
 }

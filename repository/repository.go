@@ -6,6 +6,7 @@ import (
 	"os"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/niliaranet/forum/models"
 )
 
 var database *sql.DB
@@ -23,7 +24,8 @@ func Load() {
 	create table if not exists post (
 		id integer not null primary key,
 		name text,
-		content text
+		content text,
+		time timestamp default current_timestamp
 	);
 
 	insert into post 
@@ -41,31 +43,48 @@ func Load() {
 	}
 }
 
-type post struct {
-	Name    string
-	Content string
-}
-
-func GetPosts() []post {
+func GetPosts() []models.Post {
 	sqlStmt := `
-	select name, content from post;
+	select id, name, content, time from post
+	order by id desc;
 	`
 
 	rows, err := database.Query(sqlStmt)
 	defer rows.Close()
 
-	var posts []post
+	var posts []models.Post
 
 	for rows.Next() {
+		var id int
 		var name string
 		var content string
-		err = rows.Scan(&name, &content)
+		var time string
+		err = rows.Scan(&id, &name, &content, &time)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		posts = append(posts, post{Name: name, Content: content})
+		posts = append(posts, models.Post{
+			Id: id,
+			Name: name,
+			Content: content,
+			Time: time,
+		})
 	}
 
 	return posts
+}
+
+func CreatePost(post models.Post) {
+	_, err := database.Exec(` 
+	insert into post 
+		(name, content)
+	values
+		(?, ?);
+	`, post.Name, post.Content)
+
+	if err != nil {
+		log.Print(err)
+		return
+	}
 }

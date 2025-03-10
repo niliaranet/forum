@@ -5,7 +5,12 @@
 
 <h1>Recent posts</h1>
 
+<a href="/newPost" class="button">
+    New post
+</a>
+
 {{ range $post := .posts}}
+<a class="ignore-default" href="/view?post={{$post.Id}}">
 <div class="post">
     <h3>{{ $post.Name }}</h3>
     {{ if lt (len $post.Content) 120 }}
@@ -13,7 +18,10 @@
     {{ else }}
     <p>{{ slice $post.Content 0 120 }}...</p>
     {{ end }}
+
+    <p>{{ $post.Time}}...</p>
 </div>
+</a>
 {{ end }}
 
 </main>
