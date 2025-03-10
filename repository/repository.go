@@ -4,9 +4,11 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/niliaranet/forum/models"
+	"github.com/niliaranet/forum/utils"
 )
 
 var database *sql.DB
@@ -43,6 +45,15 @@ func Load() {
 	}
 }
 
+func GetPost(id string) models.Post {
+	var name string
+	var content string
+	var time time.Time
+
+	_ = database.QueryRow("select name, content, time from post where id = ?;", id).Scan(&id, &name, &content, &time)
+	return models.Post{Name: name, Content: content, Time: utils.FormatTimestamp(time)}
+}
+
 func GetPosts() []models.Post {
 	sqlStmt := `
 	select id, name, content, time from post
@@ -58,17 +69,17 @@ func GetPosts() []models.Post {
 		var id int
 		var name string
 		var content string
-		var time string
+		var time time.Time
 		err = rows.Scan(&id, &name, &content, &time)
 		if err != nil {
 			log.Fatal(err)
 		}
 
 		posts = append(posts, models.Post{
-			Id: id,
-			Name: name,
+			Id:      id,
+			Name:    name,
 			Content: content,
-			Time: time,
+			Time:    utils.FormatTimestamp(time),
 		})
 	}
 

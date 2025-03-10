@@ -1,0 +1,17 @@
+{{ template "head.html" . }}
+{{ template "header.html" . }}
+
+<main>
+
+<div id="post">
+<h1>{{ .post.Name }}</h1>
+<p>{{ .post.Content }}</p>
+</div>
+
+<form action="/answer/{{ .post.Id }}">
+</form>
+
+
+</main>
+
+{{ template "footer.html" . }}

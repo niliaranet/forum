@@ -1,8 +1,8 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/niliaranet/forum/config"
@@ -15,7 +15,18 @@ func MainPage(c *gin.Context) {
 		"title":       config.SiteConfig.Title,
 		"description": config.SiteConfig.Description,
 		"posts":       repository.GetPosts(),
-		"timeParse":   time.Parse,
+	})
+}
+
+func ViewPost(c *gin.Context) {
+	id := c.Param("id")
+	post := repository.GetPost(id)
+	log.Print("error hunting", post.Name, post.Content)
+
+	c.HTML(http.StatusOK, "single.html", gin.H{
+		"title":       config.SiteConfig.Title,
+		"description": config.SiteConfig.Description,
+		"post":        repository.GetPost(id),
 	})
 }
 

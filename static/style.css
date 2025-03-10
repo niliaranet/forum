@@ -8,6 +8,8 @@
     --bg-secondary-light: #09b;
     --bg-base-light: #e0ebf5;
 
+    --fg-base-light: #666;
+
     --border: #bbb
 }
 
@@ -86,6 +88,15 @@ a.button {
     text-decoration: none;
 }
 
+.button.new-post-button {
+    float: right;
+    margin-top: 2.6em;
+}
+
+main h1 {
+    display: inline-block;
+}
+
 input.button {
     font-size: 1em;
     border:none;
@@ -108,6 +119,20 @@ input.button {
     background-color: var(--bg-base-light);
 }
 
+.post h3 {
+    display:inline-block;
+    margin-bottom: 0em;
+}
+
+.post .date {
+    margin-left: 0.6em;
+    display:inline;
+}
+
+.post .date {
+    color: var(--fg-base-light)
+}
+
 
 form input.text-input {
     width: 20em;
@@ -123,3 +148,4 @@ form .text-input {
 form input.submit {
     font-size: inherit;
 }
+

@@ -5,21 +5,21 @@
 
 <h1>Recent posts</h1>
 
-<a href="/newPost" class="button">
+<a href="/newPost" class="button new-post-button">
     New post
 </a>
 
 {{ range $post := .posts}}
-<a class="ignore-default" href="/view?post={{$post.Id}}">
+<a class="ignore-default" href="/view/{{$post.Id}}">
 <div class="post">
     <h3>{{ $post.Name }}</h3>
+    <p class="date">{{ $post.Time }}</p>
     {{ if lt (len $post.Content) 120 }}
     <p>{{ $post.Content }}</p>
     {{ else }}
     <p>{{ slice $post.Content 0 120 }}...</p>
     {{ end }}
 
-    <p>{{ $post.Time}}...</p>
 </div>
 </a>
 {{ end }}
