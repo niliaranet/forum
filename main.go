@@ -9,6 +9,7 @@ import (
 func main() {
 	config.LoadSiteConfig()
 	repository.Load()
+	repository.GetPosts()
 
 	routes.Run()
 }

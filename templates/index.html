@@ -1,9 +1,21 @@
-<html>
-<head>
-    <title>{{ .title }}</title>
-</head>
-<body>
-    <h1>{{ .title }}</h1>
-    <p>{{ .description }}</p>
-</body>
-</html>
+{{ template "head.html" .}}
+{{ template "header.html" .}}
+
+<main>
+
+<h1>Recent posts</h1>
+
+{{ range $post := .posts}}
+<div class="post">
+    <h3>{{ $post.Name }}</h3>
+    {{ if lt (len $post.Content) 120 }}
+    <p>{{ $post.Content }}</p>
+    {{ else }}
+    <p>{{ slice $post.Content 0 120 }}...</p>
+    {{ end }}
+</div>
+{{ end }}
+
+</main>
+
+{{ template "footer.html" .}}

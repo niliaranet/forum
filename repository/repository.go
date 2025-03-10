@@ -8,17 +8,16 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var database sql.Conn
+var database *sql.DB
 
 func Load() {
-	os.Remove("env/site.db")
+	os.Remove("database.db")
 
-	db, err := sql.Open("sqlite3", "database.db")
+	var err error
+	database, err = sql.Open("sqlite3", "database.db")
 	if err != nil {
 		log.Panic(err)
 	}
-
-	defer db.Close()
 
 	sqlStmt := `
 	create table if not exists post (
@@ -27,16 +26,46 @@ func Load() {
 		content text
 	);
 
-	insert into post (
-		name, content
-	) values (
-		"hello go!", "this is a post"
-	);
+	insert into post 
+		(name, content)
+	values
+		("Hello go!", "This is a post."),
+		("How do I exit Vim?", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
+	;
 	`
 
-	_, err = db.Exec(sqlStmt)
+	_, err = database.Exec(sqlStmt)
 	if err != nil {
 		log.Printf("%q: %s\n", err, sqlStmt)
 		return
 	}
+}
+
+type post struct {
+	Name    string
+	Content string
+}
+
+func GetPosts() []post {
+	sqlStmt := `
+	select name, content from post;
+	`
+
+	rows, err := database.Query(sqlStmt)
+	defer rows.Close()
+
+	var posts []post
+
+	for rows.Next() {
+		var name string
+		var content string
+		err = rows.Scan(&name, &content)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		posts = append(posts, post{Name: name, Content: content})
+	}
+
+	return posts
 }

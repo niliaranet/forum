@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/niliaranet/forum/handlers"
 )
@@ -9,8 +8,8 @@ import (
 var router = gin.Default()
 
 func Run() {
-	fmt.Println("running")
 	router.LoadHTMLGlob("templates/*")
+	router.Static("/static", "./static")
 
 	router.GET("/", handlers.MainPage)
 	router.Run("localhost:8080")
